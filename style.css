@@ -1,0 +1,50 @@
+body{
+    text-align: center;
+    background: rgb(0, 31, 54);
+    color: rgb(255, 248, 235);
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 17px;
+}
+
+
+#foodButton{
+    background-color: wheat;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 15px;
+    border-color:rgb(255, 255, 255);
+    padding: 10px 70px;
+}
+
+
+
+button{
+    background-color: wheat;
+    border-color:rgb(255, 255, 255);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+button:hover{
+    border-color: rgb(0, 153, 255);
+}
+
+#foodButton:hover{
+    border-color: rgb(0, 153, 255);
+}
+
+#resetButton{
+    background-color: rgb(255, 0, 0);
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 15px;
+    color: white;
+    border-color:rgb(255, 255, 255);
+    padding: 10px 30px;
+}
+
+#resetButton:hover{
+    background-color: rgb(255, 252, 252);
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 15px;
+    color: rgb(255, 0, 0);
+    border-color:rgb(255, 0, 0);
+    padding: 10px 30px;
+}
