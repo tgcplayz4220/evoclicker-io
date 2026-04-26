@@ -1,4 +1,4 @@
-// CODE MADE BY TGCPLAYZ4220. YOU MAY EDIT THIS CODE BUT PLEASE GIVE CREDIT! im also a beginner so feel free to add changes
+// CODE MADE BY TGCPLAYZ4220. UPDATED WITH ARRAYS + LOOPS
 
 // Link References
 let foodButton = document.getElementById("foodButton")
@@ -25,28 +25,103 @@ let dragonSpecial = document.getElementById("dragonSpecial")
 let cosmicinsectSpecial = document.getElementById("cosmicinsectSpecial")
 let ghostSpecial = document.getElementById("ghostSpecial")
 
-
 // Variables
 let EXP = 0
 let xpPerClick = 1
 let level = 0
-let levelBonusMultiplier = 1 + level * 0.1
+let levelBonusMultiplier = 1
 let xpUntilNextAnimal = 30
 let xpUntilNextLevel = 1000
 let currentAnimal = "Fly"
 let nextAnimal = "Butterfly"
 let ranks = 1
-let nextLevel = level + 1
-let levelDisplayInteger = level * 10
+let nextLevel = 1
+let levelDisplayInteger = 0
+
+// Evolution Data
+let evolutions = [
+    { name: "Fly", xp: 0 },
+    { name: "Butterfly", xp: 30 },
+    { name: "Mosquito", xp: 80 },
+    { name: "Wasp", xp: 150 },
+    { name: "Dragonfly", xp: 390 },
+    { name: "Pigeon", xp: 650 },
+    { name: "Duck", xp: 950 },
+    { name: "Blue Bird", xp: 1300 },
+    { name: "Hen", xp: 1700 },
+    { name: "Parrot", xp: 2150 },
+    { name: "Stork", xp: 2600 },
+    { name: "Red Bird", xp: 3100 },
+    { name: "Pelican", xp: 3650 },
+    { name: "Turkey", xp: 4500 },
+    { name: "Bat", xp: 5250 },
+    { name: "Seagull", xp: 6050 },
+    { name: "Blackbird", xp: 8050 },
+    { name: "Hornet", xp: 9050 },
+    { name: "Vulture", xp: 10050 },
+    { name: "Owl", xp: 10650 },
+    { name: "Maroon Bird", xp: 12050 },
+    { name: "Falcon", xp: 13750 },
+    { name: "Eagle", xp: 15750 },
+    { name: "Snowy Owl", xp: 18150 },
+    { name: "Hawk", xp: 23150 },
+    { name: "Raven", xp: 29150 },
+    { name: "Mad Bat", xp: 37150 },
+    { name: "Pterodactyl Child", xp: 47150 },
+    { name: "Pterodactyl", xp: 57150 },
+    { name: "Swamp Monster", xp: 82150 },
+    { name: "Stone Eater", xp: 117150 },
+    { name: "Demonic Egg Eater", xp: 132150 },
+    { name: "Demonic Bat", xp: 152150 },
+    { name: "Demonic Imp", xp: 182150 },
+    { name: "Dragon", xp: 207150 },
+    { name: "Phoenix", xp: 232150 },
+    { name: "Cosmic Insect", xp: 272150 },
+    { name: "Cosmic Big Eye", xp: 287150 },
+    { name: "Cosmic Angry Eye", xp: 299150 },
+    { name: "Cosmic Bat", xp: 314150 },
+    { name: "Ghost", xp: 349150 },
+    { name: "Ghostly Reaper", xp: 369150 },
+    { name: "Pumpkin", xp: 381150 },
+    { name: "Pumpkin Ghost", xp: 431150 },
+    { name: "Grim Reaper", xp: 451150 }
+]
+
+// Level Data
+let levels = [
+    { level: 1, xp: 1000, bonus: 1.1 },
+    { level: 2, xp: 10000, bonus: 1.2 },
+    { level: 3, xp: 20000, bonus: 1.3 },
+    { level: 4, xp: 40000, bonus: 1.4 },
+    { level: 5, xp: 100000, bonus: 1.5 }
+]
+
+// Specials System
+let specials = [
+    { el: butterflySpecial, rank: 2, power: 2, name: "Butterfly" },
+    { el: mosquitoSpecial, rank: 3, power: 3, name: "Mosquito" },
+    { el: waspSpecial, rank: 4, power: 4, name: "Wasp" },
+    { el: duckSpecial, rank: 7, power: 5, name: "Duck" },
+    { el: parrotSpecial, rank: 10, power: 6, name: "Parrot" },
+    { el: turkeySpecial, rank: 14, power: 8, name: "Turkey" },
+    { el: hornetSpecial, rank: 18, power: 12, name: "Hornet" },
+    { el: eagleSpecial, rank: 23, power: 20, name: "Eagle" },
+    { el: ravenSpecial, rank: 26, power: 30, name: "Raven" },
+    { el: pterodactylSpecial, rank: 29, power: 50, name: "Pterodactyl" },
+    { el: stoneeaterSpecial, rank: 31, power: 75, name: "Stone Eater" },
+    { el: dragonSpecial, rank: 35, power: 90, name: "Dragon" },
+    { el: cosmicinsectSpecial, rank: 37, power: 150, name: "Cosmic Insect" },
+    { el: ghostSpecial, rank: 41, power: 200, name: "Ghost" }
+]
 
 // Main Manager
 function Manage(){
-    uiManager()
-    levelManager()
     evolutionManager()
+    levelManager()
+    uiManager()
 }
 
-// UI Manager (please do not touch unless you know what you're doing)
+// UI Manager
 function uiManager(){
     xpDisplay.innerText = "📈 Current EXP: " + EXP
     xpPowerDisplay.innerText = "🎚️ EXP per click: " + xpPerClick
@@ -56,531 +131,63 @@ function uiManager(){
     nextAnimalDisplay.innerText = "⏭️ Next: " + nextAnimal
 }
 
-// Level Manager (please do not touch unless you know what you're doing)
+// Evolution Manager
+function evolutionManager(){
+    for(let i = 0; i < evolutions.length; i++){
+        if(EXP >= evolutions[i].xp){
+            currentAnimal = evolutions[i].name
+            ranks = i + 1
+
+            if(i + 1 < evolutions.length){
+                nextAnimal = evolutions[i + 1].name
+                xpUntilNextAnimal = evolutions[i + 1].xp - EXP
+            } else {
+                nextAnimal = "MAX"
+                xpUntilNextAnimal = 0
+            }
+        }
+    }
+}
+
+// Level Manager
 function levelManager(){
-    // Level 1
-    if(EXP >= 1000 && level === 0){
-        level = 1
-        nextLevel = 2
-        levelBonusMultiplier = 1.1
-        levelDisplayInteger = 10
-        xpUntilNextLevel = 10000
-    }
+    for(let i = 0; i < levels.length; i++){
+        if(EXP >= levels[i].xp){
+            level = levels[i].level
+            levelBonusMultiplier = levels[i].bonus
+            levelDisplayInteger = (levels[i].bonus - 1) * 100
 
-    // Level 2
-    if(EXP >= 10000 && level === 1){
-        level = 2
-        nextLevel = 3
-        levelBonusMultiplier = 1.2
-        levelDisplayInteger = 20
-        xpUntilNextLevel = 20000
-    }
-
-    // Level 3
-    if(EXP >= 20000 && level === 2){
-        level = 3
-        nextLevel = 4
-        levelBonusMultiplier = 1.3
-        levelDisplayInteger = 30
-        xpUntilNextLevel = 40000 
-    }
-
-    // Level 4
-    if(EXP >= 40000 && level === 3){
-        level = 4
-        nextLevel = 5
-        levelBonusMultiplier = 1.4
-        levelDisplayInteger = 40
-        xpUntilNextLevel = 100000
-    }
-
-    // Level 5 (MAX)
-    if(EXP >= 100000 && level === 4){
-        level = 5
-        nextLevel = "MAX"
-        levelBonusMultiplier = 1.5
-        levelDisplayInteger = 50
-        xpUntilNextLevel = Infinity
+            if(i + 1 < levels.length){
+                nextLevel = levels[i + 1].level
+                xpUntilNextLevel = levels[i + 1].xp - EXP
+            } else {
+                nextLevel = "MAX"
+                xpUntilNextLevel = 0
+            }
+        }
     }
 }
-
-// Evolution Manager (please do not touch unless you know what you're doing)
-function evolutionManager(){ 
-    if(EXP >= 30 && currentAnimal === "Fly"){ 
-        ranks = 2
-        currentAnimal = "Butterfly"
-        nextAnimal = "Mosquito"
-        xpUntilNextAnimal = 50
-    }
-
-    if(EXP >= 80 && currentAnimal === "Butterfly"){
-        ranks = 3
-        currentAnimal = "Mosquito"
-        nextAnimal = "Wasp"
-        xpUntilNextAnimal = 70
-    }
-
-    if(EXP >= 150 && currentAnimal === "Mosquito"){
-        ranks = 4
-        currentAnimal = "Wasp"
-        nextAnimal = "Dragonfly"
-        xpUntilNextAnimal = 240
-    }
-
-    if(EXP >= 390 && currentAnimal === "Wasp"){
-        ranks = 5
-        currentAnimal = "Dragonfly"
-        nextAnimal = "Pigeon"
-        xpUntilNextAnimal = 260
-    }
-
-    if(EXP >= 650 && currentAnimal === "Dragonfly"){
-        ranks = 6
-        currentAnimal = "Pigeon"
-        nextAnimal = "Duck"
-        xpUntilNextAnimal = 300
-    }
-
-    if(EXP >= 950 && currentAnimal === "Pigeon"){
-        ranks = 7
-        currentAnimal = "Duck"
-        nextAnimal = "Blue Bird"
-        xpUntilNextAnimal = 350
-    }
-
-    if(EXP >= 1300 && currentAnimal === "Duck"){
-        ranks = 8
-        currentAnimal = "Blue Bird"
-        nextAnimal = "Hen"
-        xpUntilNextAnimal = 400
-    }
-
-    if(EXP >= 1700 && currentAnimal === "Blue Bird"){
-        ranks = 9
-        currentAnimal = "Hen"
-        nextAnimal = "Parrot"
-        xpUntilNextAnimal = 450
-    }
-
-    if(EXP >= 2150 && currentAnimal === "Hen"){
-        ranks = 10
-        currentAnimal = "Parrot"
-        nextAnimal = "Stork"
-        xpUntilNextAnimal = 450
-    }
-
-    if(EXP >= 2600 && currentAnimal === "Parrot"){
-        ranks = 11
-        currentAnimal = "Stork"
-        nextAnimal = "Red Bird"
-        xpUntilNextAnimal = 500
-    }
-
-    if(EXP >= 3100 && currentAnimal === "Stork"){
-        ranks = 12
-        currentAnimal = "Red Bird"
-        nextAnimal = "Pelican"
-        xpUntilNextAnimal = 550
-    }
-
-    if(EXP >= 3650 && currentAnimal === "Red Bird"){
-        ranks = 13
-        currentAnimal = "Pelican"
-        nextAnimal = "Turkey"
-        xpUntilNextAnimal = 850
-    }
-
-    if(EXP >= 4500 && currentAnimal === "Pelican"){
-        ranks = 14
-        currentAnimal = "Turkey"
-        nextAnimal = "Bat"
-        xpUntilNextAnimal = 750
-    }
-
-    if(EXP >= 5250 && currentAnimal === "Turkey"){
-        ranks = 15
-        currentAnimal = "Bat"
-        nextAnimal = "Seagull"
-        xpUntilNextAnimal = 800
-    }
-
-    if(EXP >= 6050 && currentAnimal === "Bat"){
-        ranks = 16
-        currentAnimal = "Seagull"
-        nextAnimal = "Blackbird"
-        xpUntilNextAnimal = 2000
-    }
-
-    if(EXP >= 8050 && currentAnimal === "Seagull"){
-        ranks = 17
-        currentAnimal = "Blackbird"
-        nextAnimal = "Hornet"
-        xpUntilNextAnimal = 1000
-    }
-
-    if(EXP >= 9050 && currentAnimal === "Blackbird"){
-        ranks = 18
-        currentAnimal = "Hornet"
-        nextAnimal = "Vulture"
-        xpUntilNextAnimal = 1000
-    }
-
-    if(EXP >= 10050 && currentAnimal === "Hornet"){
-        ranks = 19
-        currentAnimal = "Vulture"
-        nextAnimal = "Owl"
-        xpUntilNextAnimal = 600
-    }
-
-    if(EXP >= 10650 && currentAnimal === "Vulture"){
-        ranks = 20
-        currentAnimal = "Owl"
-        nextAnimal = "Maroon Bird"
-        xpUntilNextAnimal = 1400
-    }
-
-    if(EXP >= 12050 && currentAnimal === "Owl"){
-        ranks = 21
-        currentAnimal = "Maroon Bird"
-        nextAnimal = "Falcon"
-        xpUntilNextAnimal = 1700
-    }
-
-    if(EXP >= 13750 && currentAnimal === "Maroon Bird"){
-        ranks = 22
-        currentAnimal = "Falcon"
-        nextAnimal = "Eagle"
-        xpUntilNextAnimal = 2000
-    }
-
-    if(EXP >= 15750 && currentAnimal === "Falcon"){
-        ranks = 23
-        currentAnimal = "Eagle"
-        nextAnimal = "Snowy Owl"
-        xpUntilNextAnimal = 2400
-    }
-
-    if(EXP >= 18150 && currentAnimal === "Eagle"){
-        ranks = 24
-        currentAnimal = "Snowy Owl"
-        nextAnimal = "Hawk"
-        xpUntilNextAnimal = 5000
-    }
-
-      if(EXP >= 23150 && currentAnimal === "Snowy Owl"){
-        ranks = 25
-        currentAnimal = "Hawk"
-        nextAnimal = "Raven"
-        xpUntilNextAnimal = 6000
-    }
-
-    if(EXP >= 29150 && currentAnimal === "Hawk"){
-        ranks = 26
-        currentAnimal = "Raven"
-        nextAnimal = "Mad Bat"
-        xpUntilNextAnimal = 8000
-    }
-
-    if(EXP >= 37150 && currentAnimal === "Raven"){
-        ranks = 27
-        currentAnimal = "Mad Bat"
-        nextAnimal = "Pterodactyl Child"
-        xpUntilNextAnimal = 10000
-    }
-
-    if(EXP >= 47150 && currentAnimal === "Mad Bat"){
-        ranks = 28
-        currentAnimal = "Pterodactyl Child"
-        nextAnimal = "Pterodactyl"
-        xpUntilNextAnimal = 10000
-    }
-
-    if(EXP >= 57150 && currentAnimal === "Pterodactyl Child"){
-        ranks = 29
-        currentAnimal = "Pterodactyl"
-        nextAnimal = "Swamp Monster"
-        xpUntilNextAnimal = 25000
-    }
-
-    if(EXP >= 82150 && currentAnimal === "Pterodactyl"){
-        ranks = 30
-        currentAnimal = "Swamp Monster"
-        nextAnimal = "Stone Eater"
-        xpUntilNextAnimal = 35000
-    }
-
-    if(EXP >= 117150 && currentAnimal === "Swamp Monster"){
-        ranks = 31
-        currentAnimal = "Stone Eater"
-        nextAnimal = "Demonic Egg Eater"
-        xpUntilNextAnimal = 15000
-    }
-
-    if(EXP >= 132150 && currentAnimal === "Stone Eater"){
-        ranks = 32
-        currentAnimal = "Demonic Egg Eater"
-        nextAnimal = "Demonic Bat"
-        xpUntilNextAnimal = 20000
-    }
-
-    if(EXP >= 152150 && currentAnimal === "Demonic Egg Eater"){
-        ranks = 33
-        currentAnimal = "Demonic Bat"
-        nextAnimal = "Demonic Imp"
-        xpUntilNextAnimal = 30000
-    }
-
-    if(EXP >= 182150 && currentAnimal === "Demonic Bat"){
-        ranks = 34
-        currentAnimal = "Demonic Imp"
-        nextAnimal = "Dragon"
-        xpUntilNextAnimal = 25000
-    }
-
-    if(EXP >= 207150 && currentAnimal === "Demonic Imp"){
-        ranks = 35
-        currentAnimal = "Dragon"
-        nextAnimal = "Phoenix"
-        xpUntilNextAnimal = 25000
-    }
-
-    if(EXP >= 232150 && currentAnimal === "Dragon"){
-        ranks = 36
-        currentAnimal = "Phoenix"
-        nextAnimal = "Cosmic Insect"
-        xpUntilNextAnimal = 40000
-    }
-
-    if(EXP >= 272150 && currentAnimal === "Phoenix"){
-        ranks = 37
-        currentAnimal = "Cosmic Insect"
-        nextAnimal = "Cosmic Big Eye"
-        xpUntilNextAnimal = 15000
-    }
-
-    if(EXP >= 287150 && currentAnimal === "Cosmic Insect"){
-        ranks = 38
-        currentAnimal = "Cosmic Big Eye"
-        nextAnimal = "Cosmic Angry Eye"
-        xpUntilNextAnimal = 12000
-    }
-
-    if(EXP >= 299150 && currentAnimal === "Cosmic Big Eye"){
-        ranks = 39
-        currentAnimal = "Cosmic Angry Eye"
-        nextAnimal = "Cosmic Bat"
-        xpUntilNextAnimal = 15000
-    }
-
-    if(EXP >= 314150 && currentAnimal === "Cosmic Angry Eye"){
-        ranks = 40
-        currentAnimal = "Cosmic Bat"
-        nextAnimal = "Ghost"
-        xpUntilNextAnimal = 35000
-    }
-
-    if(EXP >= 349150 && currentAnimal === "Cosmic Bat"){
-        ranks = 41
-        currentAnimal = "Ghost"
-        nextAnimal = "Ghostly Reaper"
-        xpUntilNextAnimal = 20000
-    }
-
-    if(EXP >= 369150 && currentAnimal === "Ghost"){
-        ranks = 42
-        currentAnimal = "Ghostly Reaper"
-        nextAnimal = "Pumpkin"
-        xpUntilNextAnimal = 12000
-    }
-
-    if(EXP >= 381150 && currentAnimal === "Ghostly Reaper"){
-        ranks = 43
-        currentAnimal = "Pumpkin"
-        nextAnimal = "Pumpkin Ghost"
-        xpUntilNextAnimal = 50000
-    }
-
-    if(EXP >= 431150 && currentAnimal === "Pumpkin"){
-        ranks = 44
-        currentAnimal = "Pumpkin Ghost"
-        nextAnimal = "Grim Reaper"
-        xpUntilNextAnimal = 20000
-    }
-
-    if(EXP >= 451150 && currentAnimal === "Pumpkin Ghost"){
-        ranks = 45
-        currentAnimal = "Grim Reaper"
-        nextAnimal = "MAX"
-        xpUntilNextAnimal = Infinity
-    }
-}
-
 
 // Eat Script
 foodButton.addEventListener("click", function(){
-    EXP += Math.round(xpPerClick * levelBonusMultiplier)
-    xpUntilNextLevel = xpUntilNextLevel - xpPerClick
-    xpUntilNextAnimal = xpUntilNextAnimal - xpPerClick
-
+    let gainedXP = Math.round(xpPerClick * levelBonusMultiplier)
+    EXP += gainedXP
     Manage()
 })
 
-butterflySpecial.addEventListener("click", function(){
-    if(ranks >= 2){
-        xpPerClick = 2
-    }
-
-    else{
-        alert("You must be a Butterfly or higher to access this!")
-    }
-    Manage()
+// Specials Check
+specials.forEach(s => {
+    s.el.addEventListener("click", function(){
+        if(ranks >= s.rank){
+            xpPerClick = s.power
+        } else {
+            alert("You must be a " + s.name + " or higher!")
+        }
+        Manage()
+    })
 })
 
-mosquitoSpecial.addEventListener("click", function(){
-    if(ranks >= 3){
-        xpPerClick = 3
-    }
-
-    else{
-        alert("You must be a Mosquito or higher to access this!")
-    }
-    Manage()
-})
-
-waspSpecial.addEventListener("click", function(){
-    if(ranks >= 4){
-        xpPerClick = 4
-    }
-
-    else{
-        alert("You must be a Wasp or higher to access this!")
-    }
-    Manage()
-})
-
-duckSpecial.addEventListener("click", function(){
-    if(ranks >= 7){
-        xpPerClick = 5
-    }
-
-    else{
-        alert("You must be a Duck or higher to access this!")
-    }
-    Manage()
-})
-
-parrotSpecial.addEventListener("click", function(){
-    if(ranks >= 10){
-        xpPerClick = 6
-    }
-
-    else{
-        alert("You must be a Parrot or higher to access this!")
-    }
-    Manage()
-})
-
-turkeySpecial.addEventListener("click", function(){
-    if(ranks >= 14){
-        xpPerClick = 8
-    }
-
-    else{
-        alert("You must be a Turkey or higher to access this!")
-    }
-    Manage()
-})
-
-hornetSpecial.addEventListener("click", function(){
-    if(ranks >= 18){
-        xpPerClick = 12
-    }
-
-    else{
-        alert("You must be a Hornet or higher to access this!")
-    }
-    Manage()
-})
-
-eagleSpecial.addEventListener("click", function(){
-    if(ranks >= 23){
-        xpPerClick = 20
-    }
-
-    else{
-        alert("You must be an Eagle or higher to access this!")
-    }
-    Manage()
-})
-
-ravenSpecial.addEventListener("click", function(){
-    if(ranks >= 26){
-        xpPerClick = 30
-    }
-
-    else{
-        alert("You must be a Raven or higher to access this!")
-    }
-    Manage()
-})
-
-pterodactylSpecial.addEventListener("click", function(){
-    if(ranks >= 29){
-        xpPerClick = 50
-    }
-
-    else{
-        alert("You must be a Pterodactyl or higher to access this!")
-    }
-    Manage()
-})
-
-stoneeaterSpecial.addEventListener("click", function(){
-    if(ranks >= 31){
-        xpPerClick = 75
-    }
-
-    else{
-        alert("You must be a Stone Eater or higher to access this!")
-    }
-    Manage()
-})
-
-dragonSpecial.addEventListener("click", function(){
-    if(ranks >= 35){
-        xpPerClick = 90
-    }
-
-    else{
-        alert("You must be a Dragon or higher to access this!")
-    }
-    Manage()
-})
-
-
-cosmicinsectSpecial.addEventListener("click", function(){
-    if(ranks >= 37){
-        xpPerClick = 150
-    }
-
-    else{
-        alert("You must be a Cosmic Insect or higher to access this!")
-    }
-    Manage()
-})
-
-ghostSpecial.addEventListener("click", function(){
-    if(ranks >= 41){
-        xpPerClick = 200
-    }
-
-    else{
-        alert("You must be a Ghost or higher to access this!")
-    }
-    Manage()
-})
-
-// Reset Button Script
+// Reset Button
 resetButton.addEventListener("click", function(){
     alert("Late April Fools! This does not do anything.. for now ;)")
 })
